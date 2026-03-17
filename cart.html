@@ -1,37 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Mazo Deals - Cart</title>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cart — Mazo Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07080f;--surface:#0f1019;--surface2:#171824;--surface3:#1f2030;--border:#252636;--accent:#f04e23;--accent-glow:rgba(240,78,35,.22);--accent2:#f8a21f;--text:#eeeef5;--sub:#9999bb;--muted:#55556e;--success:#19d47a;--danger:#f04e23;--r:12px;--r-sm:8px;--r-lg:18px;--nav-h:66px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}a{color:inherit;text-decoration:none}button{cursor:pointer;border:none;font-family:inherit;font-size:inherit}input{font-family:inherit;font-size:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:rgba(7,8,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 clamp(16px,4vw,64px);gap:20px;}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.nav-logo em{color:var(--accent);font-style:normal}.logo-tag{background:var(--accent);color:#fff;font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 7px;border-radius:4px;text-transform:uppercase;}
+.nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.nav-icon-btn{background:none;color:var(--sub);width:40px;height:40px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;transition:background .15s;position:relative;}
+.nav-icon-btn:hover{background:var(--surface2);color:var(--text)}
+.badge{position:absolute;top:4px;right:4px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.nav-cta{background:var(--accent);color:#fff;padding:9px 20px;border-radius:40px;font-weight:600;font-size:14px;}
+.breadcrumb{display:flex;align-items:center;gap:8px;padding:14px clamp(16px,4vw,64px);font-size:13px;color:var(--muted);}
+.breadcrumb a{color:var(--muted);transition:color .15s;}.breadcrumb a:hover{color:var(--accent)}.bc-sep{color:var(--border)}
+.cart-wrap{display:flex;gap:28px;padding:0 clamp(16px,4vw,64px) 60px;align-items:flex-start;}
+.cart-main{flex:1;min-width:0;}
+.cart-title{font-size:clamp(22px,3vw,32px);font-weight:900;letter-spacing:-.5px;margin-bottom:22px;display:flex;align-items:center;gap:12px;}
+.cnt-tag{background:var(--accent);color:#fff;font-size:14px;font-weight:700;padding:3px 11px;border-radius:40px;}
+.empty-cart{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:60px 32px;text-align:center;}
+.empty-icon{font-size:64px;margin-bottom:18px;opacity:.5;}
+.empty-cart h3{font-size:20px;font-weight:800;margin-bottom:10px;}
+.empty-cart p{color:var(--sub);margin-bottom:24px;}
+.btn-primary{background:var(--accent);color:#fff;padding:13px 28px;border-radius:40px;font-weight:700;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:opacity .15s;box-shadow:0 4px 24px var(--accent-glow);}
+.btn-primary:hover{opacity:.88}
+.cart-row{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:20px;display:flex;gap:18px;margin-bottom:14px;align-items:center;transition:border-color .2s;}
+.cart-row:hover{border-color:var(--border)}
+.c-img{width:88px;height:88px;flex-shrink:0;background:var(--surface2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:36px;}
+.c-info{flex:1;min-width:0;}
+.c-cat{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.c-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin:4px 0 6px;line-height:1.3;}
+.c-var{font-size:12px;color:var(--sub);}
+.qty-ctrl{display:inline-flex;align-items:center;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r-sm);overflow:hidden;margin-top:10px;}
+.q-btn{width:36px;height:38px;background:none;color:var(--text);font-size:18px;transition:background .15s;}
+.q-btn:hover{background:var(--surface3)}.q-val{min-width:36px;text-align:center;font-weight:700;font-size:14px;}
+.c-price{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;flex-shrink:0;}
+.c-actions{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.rm-btn{background:none;color:var(--muted);font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;transition:color .15s;}
+.rm-btn:hover{color:var(--danger)}
+.summary{width:310px;flex-shrink:0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:24px;position:sticky;top:calc(var(--nav-h)+14px);}
+.sum-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:20px;}
+.coupon-row{display:flex;gap:8px;margin-bottom:18px;}
+.coupon-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);border-radius:var(--r-sm);padding:10px 14px;outline:none;font-size:14px;transition:border-color .15s;}
+.coupon-input:focus{border-color:var(--accent)}.coupon-input::placeholder{color:var(--muted)}
+.coupon-btn{background:var(--surface3);color:var(--text);padding:10px 15px;border-radius:var(--r-sm);font-weight:700;font-size:13px;border:1.5px solid var(--border);transition:border-color .15s,color .15s;}
+.coupon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.s-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;color:var(--sub);}
+.s-row .val{color:var(--text);font-weight:600;}
+.s-row.green .val{color:var(--success)}
+.s-div{border:none;border-top:1px solid var(--border);margin:14px 0;}
+.s-total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:20px;}
+.checkout-btn{width:100%;background:var(--accent);color:#fff;padding:15px;border-radius:40px;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s,transform .1s;box-shadow:0 4px 24px var(--accent-glow);}
+.checkout-btn:hover{opacity:.88;transform:scale(.98)}
+.pay-icons{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.pay-ic{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:4px 9px;font-size:11px;font-weight:700;color:var(--sub);}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface3);border:1px solid var(--border);color:var(--text);padding:13px 22px;border-radius:40px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.5);transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:999;pointer-events:none;}
+#toast.show{transform:translateX(-50%) translateY(0)}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:22px clamp(16px,4vw,64px);}
+.f-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.f-copy{font-size:13px;color:var(--muted);}
+@media(max-width:860px){.cart-wrap{flex-direction:column}.summary{width:100%;position:static}}
+</style>
 </head>
 <body>
-<h1>Your Cart</h1>
-<a href="index.html">Home</a>
-<ul id="cartItems"></ul>
-<h3 id="total"></h3>
-<button onclick="clearCart()">Clear Cart</button>
-
+<div id="toast">✅ <span id="toast-msg"></span></div>
+<nav>
+  <a class="nav-logo" href="index.html"><em>Mazo</em>Deals<span class="logo-tag">SALE</span></a>
+  <div style="flex:1"></div>
+  <div class="nav-actions">
+    <a class="nav-icon-btn" href="wishlist.html">♡</a>
+    <a class="nav-icon-btn" href="cart.html">🛒<span class="badge" id="cart-badge">0</span></a>
+    <a class="nav-cta" href="login.html">Sign In</a>
+  </div>
+</nav>
+<div class="breadcrumb"><a href="index.html">Home</a><span class="bc-sep">›</span><span style="color:var(--text)">Cart</span></div>
+<div class="cart-wrap">
+  <div class="cart-main">
+    <div class="cart-title">Shopping Cart <span class="cnt-tag" id="cnt-tag">0</span></div>
+    <div id="cart-content"></div>
+  </div>
+  <div class="summary">
+    <div class="sum-title">Order Summary</div>
+    <div class="coupon-row">
+      <input class="coupon-input" type="text" id="coupon-inp" placeholder="Coupon code (try MAZO20)"/>
+      <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+    </div>
+    <div class="s-row"><span>Subtotal</span><span class="val" id="s-sub">₹0</span></div>
+    <div class="s-row"><span>Shipping</span><span class="val" id="s-ship">FREE</span></div>
+    <div class="s-row green" id="s-disc-row" style="display:none"><span>Discount</span><span class="val" id="s-disc">-₹0</span></div>
+    <div class="s-row"><span>Taxes (18%)</span><span class="val" id="s-tax">₹0</span></div>
+    <hr class="s-div"/>
+    <div class="s-total"><span>Total</span><span id="s-total">₹0</span></div>
+    <a class="checkout-btn" href="checkout.html">Checkout →</a>
+    <div class="pay-icons"><div class="pay-ic">VISA</div><div class="pay-ic">MC</div><div class="pay-ic">UPI</div><div class="pay-ic">GPay</div><div class="pay-ic">COD</div></div>
+  </div>
+</div>
+<footer><div class="f-bottom"><div class="f-copy">© 2025 Mazo Deals. All rights reserved.</div><a href="shop.html" style="color:var(--accent);font-size:13px;font-weight:600">← Continue Shopping</a></div></footer>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let total = 0;
-let list = document.getElementById('cartItems');
-
-
-cart.forEach(item => {
-    let li = document.createElement('li');
-    li.textContent = item.name + ' - ₹' + item.price;
-    list.appendChild(li);
-    total += item.price;
-});
-
-
-document.getElementById('total').textContent = 'Total: ₹' + total;
-
-
-function clearCart() {
-    localStorage.removeItem('cart');
-    location.reload();
+const PRODUCTS=[
+  {id:1,name:'Pro Wireless Earbuds X1',cat:'Electronics',emoji:'🎧',price:1299},
+  {id:2,name:'4K Ultra Smart TV 55"',cat:'Electronics',emoji:'📺',price:28999},
+  {id:3,name:'Mechanical Gaming Keyboard',cat:'Electronics',emoji:'⌨️',price:3499},
+  {id:4,name:'Vintage Oversized Hoodie',cat:'Fashion',emoji:'👕',price:899},
+  {id:5,name:'Minimalist Sneakers Pro',cat:'Fashion',emoji:'👟',price:2499},
+  {id:6,name:'Smart Air Purifier 360',cat:'Home',emoji:'🌬️',price:7999},
+  {id:7,name:'Coffee Maker Deluxe Pro',cat:'Home',emoji:'☕',price:4299},
+  {id:8,name:'Wireless Gaming Mouse',cat:'Electronics',emoji:'🖱️',price:1999},
+  {id:9,name:'Yoga Mat Premium Plus',cat:'Sports',emoji:'🧘',price:1299},
+  {id:10,name:'Vitamin C Glow Serum',cat:'Beauty',emoji:'✨',price:699},
+  {id:11,name:'Smart Fitness Band Pro',cat:'Electronics',emoji:'⌚',price:2299},
+  {id:12,name:'Backpack Pro Traveller',cat:'Fashion',emoji:'🎒',price:1799},
+];
+let discount=0;
+function getCart(){return JSON.parse(localStorage.getItem('mazo-cart')||'[]')}
+function saveCart(c){localStorage.setItem('mazo-cart',JSON.stringify(c))}
+function render(){
+  const cart=getCart();
+  document.getElementById('cnt-tag').textContent=cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-badge').textContent=cart.reduce((s,i)=>s+i.qty,0);
+  if(!cart.length){
+    document.getElementById('cart-content').innerHTML=`<div class="empty-cart"><div class="empty-icon">🛒</div><h3>Your cart is empty</h3><p>Looks like you haven't added anything yet.</p><a class="btn-primary" href="shop.html">Start Shopping</a></div>`;
+    updateSummary(0);return;
+  }
+  document.getElementById('cart-content').innerHTML=cart.map(item=>{
+    const p=PRODUCTS.find(x=>x.id===item.id);if(!p)return'';
+    return`<div class="cart-row">
+      <div class="c-img">${p.emoji}</div>
+      <div class="c-info">
+        <div class="c-cat">${p.cat}</div>
+        <div class="c-name">${p.name}</div>
+        <div class="c-var">${item.color?`Color: ${item.color}`:''}${item.size?` | Size: ${item.size}`:''}</div>
+        <div class="qty-ctrl">
+          <button class="q-btn" onclick="updQty('${item.key||item.id}',-1)">−</button>
+          <span class="q-val">${item.qty}</span>
+          <button class="q-btn" onclick="updQty('${item.key||item.id}',1)">+</button>
+        </div>
+      </div>
+      <div class="c-actions">
+        <span class="c-price">₹${(p.price*item.qty).toLocaleString()}</span>
+        <button class="rm-btn" onclick="removeItem('${item.key||item.id}')">✕ Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  const sub=cart.reduce((s,i)=>{const p=PRODUCTS.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);
+  updateSummary(sub);
 }
+function updQty(key,d){
+  const c=getCart();const item=c.find(i=>(i.key||i.id)==key);
+  if(item){item.qty=Math.max(1,item.qty+d);saveCart(c);render();}
+}
+function removeItem(key){
+  let c=getCart();c=c.filter(i=>(i.key||i.id)!=key);saveCart(c);render();showToast('Item removed');
+}
+function updateSummary(sub){
+  const ship=sub>=999?0:99;const tax=Math.round(sub*.18);const total=sub+ship+tax-discount;
+  document.getElementById('s-sub').textContent=`₹${sub.toLocaleString()}`;
+  document.getElementById('s-ship').textContent=ship===0?'FREE':`₹${ship}`;
+  document.getElementById('s-tax').textContent=`₹${tax.toLocaleString()}`;
+  document.getElementById('s-total').textContent=`₹${total.toLocaleString()}`;
+  if(discount>0){document.getElementById('s-disc-row').style.display='flex';document.getElementById('s-disc').textContent=`-₹${discount.toLocaleString()}`;}
+}
+function applyCoupon(){
+  const code=document.getElementById('coupon-inp').value.trim().toUpperCase();
+  if(code==='MAZO20'){discount=200;showToast('Coupon applied — ₹200 off!');render();}
+  else if(code==='SAVE10'){
+    const sub=getCart().reduce((s,i)=>{const p=PRODUCTS.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);
+    discount=Math.round(sub*.1);showToast('10% discount applied!');render();
+  }else{showToast('Invalid coupon code');}
+}
+let tt;function showToast(m){document.getElementById('toast-msg').textContent=m;const t=document.getElementById('toast');t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+render();
 </script>
 </body>
 </html>
