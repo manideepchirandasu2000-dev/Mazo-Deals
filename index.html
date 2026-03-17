@@ -1,48 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Mazo Deals - Home</title>
-    <style>
-        body { font-family: Arial; margin:0; }
-        header { background:#333; color:#fff; padding:15px; text-align:center; }
-        nav a { margin:10px; color:white; text-decoration:none; }
-        .products { display:flex; gap:20px; padding:20px; }
-        .card { border:1px solid #ccc; padding:10px; width:200px; }
-        button { background:green; color:white; border:none; padding:5px; }
-    </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mazo Deals — Best Prices, Every Day</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07080f;--surface:#0f1019;--surface2:#171824;--surface3:#1f2030;--border:#252636;--accent:#f04e23;--accent-glow:rgba(240,78,35,.22);--accent2:#f8a21f;--text:#eeeef5;--sub:#9999bb;--muted:#55556e;--success:#19d47a;--r:12px;--r-sm:8px;--r-lg:18px;--nav-h:66px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;font-family:inherit;font-size:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:rgba(7,8,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 clamp(16px,4vw,64px);gap:20px;}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;text-decoration:none;}
+.nav-logo em{color:var(--accent);font-style:normal}
+.logo-tag{background:var(--accent);color:#fff;font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 7px;border-radius:4px;text-transform:uppercase;}
+.nav-search{flex:1;max-width:500px;display:flex;align-items:center;gap:10px;background:var(--surface2);border:1.5px solid var(--border);border-radius:40px;padding:0 18px;transition:border-color .2s,box-shadow .2s;}
+.nav-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.nav-search input{background:none;border:none;outline:none;color:var(--text);font-size:14px;width:100%;padding:11px 0;}
+.nav-search input::placeholder{color:var(--muted)}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{background:none;color:var(--sub);padding:8px 13px;border-radius:var(--r-sm);font-size:14px;font-weight:500;transition:background .15s,color .15s;text-decoration:none;display:block;}
+.nav-link:hover,.nav-link.active{background:var(--surface2);color:var(--text)}
+.nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.nav-icon-btn{background:none;color:var(--sub);width:40px;height:40px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;position:relative;text-decoration:none;}
+.nav-icon-btn:hover{background:var(--surface2);color:var(--text)}
+.badge{position:absolute;top:4px;right:4px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.nav-cta{background:var(--accent);color:#fff;padding:9px 20px;border-radius:40px;font-weight:600;font-size:14px;transition:opacity .15s,transform .1s;text-decoration:none;}
+.nav-cta:hover{opacity:.88}
+
+/* TICKER */
+.ticker-wrap{background:var(--accent);overflow:hidden;padding:9px 0;white-space:nowrap;}
+.ticker-inner{display:inline-flex;gap:48px;animation:ticker 30s linear infinite;}
+.t-item{font-size:12px;font-weight:600;color:#fff;display:flex;align-items:center;gap:10px;}
+.t-dot{width:4px;height:4px;background:rgba(255,255,255,.5);border-radius:50%;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:clamp(64px,10vw,120px) clamp(16px,4vw,64px);min-height:540px;display:flex;align-items:center;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 65% 40%,rgba(240,78,35,.16) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 15% 80%,rgba(248,162,31,.09) 0%,transparent 60%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.2;}
+.hero-content{position:relative;max-width:660px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(240,78,35,.1);border:1px solid rgba(240,78,35,.28);color:var(--accent);font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:6px 14px;border-radius:40px;margin-bottom:26px;}
+.hero h1{font-size:clamp(42px,6.5vw,78px);font-weight:900;line-height:1.0;letter-spacing:-2.5px;margin-bottom:22px;}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:17px;color:var(--sub);line-height:1.65;margin-bottom:36px;max-width:500px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{background:var(--accent);color:#fff;padding:14px 30px;border-radius:40px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 24px var(--accent-glow);text-decoration:none;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(240,78,35,.4)}
+.btn-outline{background:none;color:var(--text);padding:14px 28px;border-radius:40px;font-weight:600;font-size:15px;border:1.5px solid var(--border);transition:border-color .15s,background .15s;text-decoration:none;}
+.btn-outline:hover{border-color:var(--accent);background:rgba(240,78,35,.06)}
+.hero-stats{display:flex;gap:40px;margin-top:50px;flex-wrap:wrap;}
+.stat-item{border-left:2px solid var(--accent);padding-left:16px;}
+.stat-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1;}
+.stat-lbl{font-size:12px;color:var(--sub);margin-top:4px;}
+
+/* SECTIONS */
+.section{padding:clamp(40px,6vw,80px) clamp(16px,4vw,64px);}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+.sec-title{font-size:clamp(20px,2.5vw,28px);font-weight:800;letter-spacing:-.5px;}
+.see-all{color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:5px;transition:gap .15s;text-decoration:none;}
+.see-all:hover{gap:9px}
+
+/* CATEGORY GRID */
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;}
+.cat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s,transform .2s;text-align:center;text-decoration:none;}
+.cat-card:hover{border-color:var(--accent);background:var(--surface2);transform:translateY(-3px)}
+.cat-icon{font-size:32px;}
+.cat-name{font-size:13px;font-weight:600;color:var(--sub);}
+.cat-count{font-size:11px;color:var(--muted);}
+
+/* PRODUCT CARD */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
+.product-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;text-decoration:none;display:block;}
+.product-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.product-img{width:100%;aspect-ratio:1;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:56px;transition:transform .3s;position:relative;}
+.product-card:hover .product-img{transform:scale(1.04)}
+.p-badge{position:absolute;top:12px;left:12px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 9px;border-radius:5px;}
+.p-badge.new{background:#7c3aed}.p-badge.hot{background:#dc2626}
+.product-body{padding:16px;}
+.p-cat{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.p-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+.p-stars{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.stars{color:var(--accent2);font-size:12px;}
+.r-count{font-size:12px;color:var(--muted);}
+.p-price{display:flex;align-items:baseline;gap:8px;}
+.price-now{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+.price-old{font-size:14px;color:var(--muted);text-decoration:line-through;}
+.price-pct{font-size:12px;font-weight:600;color:var(--success);}
+.atc-btn{width:100%;margin-top:14px;background:var(--surface2);color:var(--text);border:1.5px solid var(--border);padding:10px;border-radius:var(--r-sm);font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s,border-color .15s,color .15s;}
+.atc-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* PROMO BANNER */
+.promo-wrap{padding:0 clamp(16px,4vw,64px) clamp(40px,6vw,80px);}
+.promo-banner{background:linear-gradient(135deg,#1a0a00,#2d1200 50%,#1a0a00);border:1.5px solid rgba(240,78,35,.4);border-radius:var(--r-lg);padding:48px clamp(24px,4vw,60px);display:flex;align-items:center;justify-content:space-between;gap:32px;overflow:hidden;position:relative;}
+.promo-banner::before{content:'';position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(248,162,31,.18),transparent 70%);}
+.promo-tag{background:rgba(248,162,31,.15);border:1px solid rgba(248,162,31,.3);color:var(--accent2);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:40px;display:inline-block;margin-bottom:16px;}
+.promo-title{font-size:clamp(24px,3.5vw,40px);font-weight:900;letter-spacing:-1px;line-height:1.05;margin-bottom:10px;}
+.promo-title em{color:var(--accent2);font-style:normal;}
+.promo-sub{color:var(--sub);font-size:15px;margin-bottom:24px;}
+.timer-row{display:flex;gap:12px;margin-bottom:28px;}
+.t-block{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 14px;text-align:center;min-width:62px;}
+.t-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1;}
+.t-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;}
+.feat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:28px 22px;display:flex;flex-direction:column;gap:14px;transition:border-color .2s;}
+.feat-card:hover{border-color:var(--accent)}
+.feat-icon{font-size:30px;}
+.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
+.feat-desc{font-size:13px;color:var(--sub);line-height:1.6;}
+
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:48px clamp(16px,4vw,64px) 28px;margin-top:40px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-desc{font-size:14px;color:var(--sub);line-height:1.7;max-width:260px;margin-top:14px;}
+.footer-socials{display:flex;gap:10px;margin-top:20px;}
+.s-btn{width:36px;height:36px;border-radius:var(--r-sm);background:var(--surface2);border:1px solid var(--border);color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
+.s-btn:hover{background:rgba(240,78,35,.1);color:var(--accent);border-color:rgba(240,78,35,.3)}
+.f-col h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:16px;}
+.f-links{display:flex;flex-direction:column;gap:10px;}
+.f-links a{font-size:14px;color:var(--sub);transition:color .15s;cursor:pointer;}
+.f-links a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.f-copy{font-size:13px;color:var(--muted);}
+.f-legal{display:flex;gap:20px;}
+.f-legal a{font-size:13px;color:var(--muted);cursor:pointer;transition:color .15s;}
+.f-legal a:hover{color:var(--sub)}
+
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface3);border:1px solid var(--border);color:var(--text);padding:13px 22px;border-radius:40px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.5);transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:999;pointer-events:none;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}.nav-links{display:none}}
+@media(max-width:600px){.footer-grid{grid-template-columns:1fr}.hero-stats{gap:24px}}
+</style>
 </head>
 <body>
-<header>
-    <h1>Mazo Deals</h1>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-    </nav>
-</header>
 
-<h2 style="text-align:center;">Welcome to Mazo Deals</h2>
+<div id="toast">✅ <span id="toast-msg"></span></div>
 
-<div class="products">
-    <div class="card">
-        <h3>Phone</h3>
-        <p>₹10000</p>
-        <button onclick="addToCart('Phone',10000)">Add to Cart</button>
-    </div>
-    <div class="card">
-        <h3>Laptop</h3>
-        <p>₹50000</p>
-        <button onclick="addToCart('Laptop',50000)">Add to Cart</button>
-    </div>
+<nav>
+  <a class="nav-logo" href="index.html"><em>Mazo</em>Deals<span class="logo-tag">SALE</span></a>
+  <div class="nav-search">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search products, brands…" onkeydown="if(event.key==='Enter')window.location='shop.html'"/>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link active" href="index.html">Home</a>
+    <a class="nav-link" href="shop.html">Shop</a>
+    <a class="nav-link" href="wishlist.html">Wishlist</a>
+    <a class="nav-link" href="about.html">About</a>
+  </div>
+  <div class="nav-actions">
+    <a class="nav-icon-btn" href="wishlist.html" title="Wishlist">♡</a>
+    <a class="nav-icon-btn" href="cart.html" title="Cart">
+      🛒<span class="badge" id="cart-badge">0</span>
+    </a>
+    <a class="nav-cta" href="login.html">Sign In</a>
+  </div>
+</nav>
+
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="t-item"><span class="t-dot"></span>FREE SHIPPING on orders above ₹999</span>
+    <span class="t-item"><span class="t-dot"></span>FLASH SALE — Up to 70% OFF today</span>
+    <span class="t-item"><span class="t-dot"></span>New Arrivals every Friday</span>
+    <span class="t-item"><span class="t-dot"></span>Easy 30-Day Returns</span>
+    <span class="t-item"><span class="t-dot"></span>10,000+ Happy Customers</span>
+    <span class="t-item"><span class="t-dot"></span>FREE SHIPPING on orders above ₹999</span>
+    <span class="t-item"><span class="t-dot"></span>FLASH SALE — Up to 70% OFF today</span>
+    <span class="t-item"><span class="t-dot"></span>New Arrivals every Friday</span>
+    <span class="t-item"><span class="t-dot"></span>Easy 30-Day Returns</span>
+    <span class="t-item"><span class="t-dot"></span>10,000+ Happy Customers</span>
+  </div>
 </div>
 
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="eyebrow">⚡ Flash Sale — Limited Time</div>
+    <h1>The Best <span>Deals</span><br/>You'll Find Anywhere</h1>
+    <p class="hero-sub">Thousands of products at unbeatable prices. Electronics, fashion, home essentials and more — all in one place.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="shop.html">🔥 Shop Deals</a>
+      <a class="btn-outline" href="shop.html">Browse All Products</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">50K+</div><div class="stat-lbl">Products Listed</div></div>
+      <div class="stat-item"><div class="stat-num">70%</div><div class="stat-lbl">Max Discount</div></div>
+      <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-lbl">Customer Rating</div></div>
+      <div class="stat-item"><div class="stat-num">10K+</div><div class="stat-lbl">Happy Customers</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sec-header">
+    <h2 class="sec-title">Shop by Category</h2>
+    <a class="see-all" href="shop.html">View All →</a>
+  </div>
+  <div class="cats-grid">
+    <a class="cat-card" href="shop.html"><div class="cat-icon">📱</div><div class="cat-name">Electronics</div><div class="cat-count">240+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">👗</div><div class="cat-name">Fashion</div><div class="cat-count">580+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">🏠</div><div class="cat-name">Home & Living</div><div class="cat-count">340+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">⚽</div><div class="cat-name">Sports</div><div class="cat-count">180+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">💄</div><div class="cat-name">Beauty</div><div class="cat-count">220+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">📚</div><div class="cat-name">Books</div><div class="cat-count">490+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">🎮</div><div class="cat-name">Gaming</div><div class="cat-count">290+ items</div></a>
+    <a class="cat-card" href="shop.html"><div class="cat-icon">🍕</div><div class="cat-name">Food & Grocery</div><div class="cat-count">130+ items</div></a>
+  </div>
+</section>
+
+<div class="promo-wrap">
+  <div class="promo-banner">
+    <div>
+      <div class="promo-tag">⚡ Flash Deal</div>
+      <div class="promo-title">Up to <em>70% OFF</em><br/>on Electronics</div>
+      <p class="promo-sub">Limited time offer. Don't miss the biggest sale of the year.</p>
+      <div class="timer-row">
+        <div class="t-block"><div class="t-num" id="t-h">08</div><div class="t-lbl">Hours</div></div>
+        <div class="t-block"><div class="t-num" id="t-m">45</div><div class="t-lbl">Mins</div></div>
+        <div class="t-block"><div class="t-num" id="t-s">30</div><div class="t-lbl">Secs</div></div>
+      </div>
+      <a class="btn-primary" href="shop.html">Grab the Deal</a>
+    </div>
+    <div style="font-size:110px;filter:drop-shadow(0 0 40px rgba(248,162,31,.3));position:relative;z-index:1">⚡</div>
+  </div>
+</div>
+
+<section class="section" style="padding-top:0">
+  <div class="sec-header"><h2 class="sec-title">🔥 Hot Deals</h2><a class="see-all" href="shop.html">See All →</a></div>
+  <div class="products-grid" id="hot-products"></div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="sec-header"><h2 class="sec-title">✨ New Arrivals</h2><a class="see-all" href="shop.html">See All →</a></div>
+  <div class="products-grid" id="new-products"></div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="sec-header"><h2 class="sec-title">Why Shop with Mazo?</h2></div>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">🚚</div><div class="feat-title">Free Shipping</div><div class="feat-desc">Free delivery on all orders above ₹999. Express delivery available.</div></div>
+    <div class="feat-card"><div class="feat-icon">🔄</div><div class="feat-title">Easy Returns</div><div class="feat-desc">30-day hassle-free return policy. No questions asked.</div></div>
+    <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">Secure Payments</div><div class="feat-desc">100% secure transactions with buyer protection guarantee.</div></div>
+    <div class="feat-card"><div class="feat-icon">🎧</div><div class="feat-title">24/7 Support</div><div class="feat-desc">Round-the-clock customer support via chat, email, and phone.</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a class="nav-logo" href="index.html"><em>Mazo</em>Deals<span class="logo-tag">SALE</span></a>
+      <p class="footer-desc">Your one-stop destination for the best deals across all categories. Quality products, unbeatable prices, every single day.</p>
+      <div class="footer-socials"><div class="s-btn">f</div><div class="s-btn">𝕏</div><div class="s-btn">in</div><div class="s-btn">▶</div></div>
+    </div>
+    <div class="f-col"><h4>Shop</h4><div class="f-links"><a href="shop.html">All Products</a><a href="shop.html">Electronics</a><a href="shop.html">Fashion</a><a href="shop.html">Flash Deals</a></div></div>
+    <div class="f-col"><h4>Help</h4><div class="f-links"><a href="order-tracking.html">Track Order</a><a href="about.html">Returns</a><a href="about.html">FAQs</a><a href="about.html">Contact Us</a></div></div>
+    <div class="f-col"><h4>Account</h4><div class="f-links"><a href="login.html">Login</a><a href="login.html">Register</a><a href="profile.html">My Profile</a><a href="wishlist.html">Wishlist</a></div></div>
+  </div>
+  <div class="footer-bottom"><div class="f-copy">© 2025 Mazo Deals. All rights reserved.</div><div class="f-legal"><a>Privacy</a><a>Terms</a><a>Cookies</a></div></div>
+</footer>
+
 <script>
-function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.push({name, price});
-    localStorage.setItem('cart', JSON.stringify(cart));
-    alert(name + ' added to cart');
-}
+const PRODUCTS=[
+  {id:1,name:'Pro Wireless Earbuds X1',cat:'Electronics',emoji:'🎧',price:1299,old:3999,rating:4.8,reviews:2341,badge:'SALE'},
+  {id:2,name:'4K Ultra Smart TV 55"',cat:'Electronics',emoji:'📺',price:28999,old:54999,rating:4.6,reviews:876,badge:'HOT'},
+  {id:3,name:'Mechanical Gaming Keyboard',cat:'Electronics',emoji:'⌨️',price:3499,old:6999,rating:4.7,reviews:1203,badge:'SALE'},
+  {id:4,name:'Vintage Oversized Hoodie',cat:'Fashion',emoji:'👕',price:899,old:1999,rating:4.5,reviews:543,badge:'NEW',isNew:true},
+  {id:5,name:'Minimalist Sneakers Pro',cat:'Fashion',emoji:'👟',price:2499,old:5999,rating:4.9,reviews:3211,badge:'HOT'},
+  {id:6,name:'Smart Air Purifier 360',cat:'Home',emoji:'🌬️',price:7999,old:14999,rating:4.7,reviews:432,badge:'SALE'},
+  {id:7,name:'Coffee Maker Deluxe Pro',cat:'Home',emoji:'☕',price:4299,old:8999,rating:4.6,reviews:789,badge:'SALE'},
+  {id:8,name:'Wireless Gaming Mouse',cat:'Electronics',emoji:'🖱️',price:1999,old:3999,rating:4.8,reviews:2104,badge:'HOT'},
+  {id:9,name:'Yoga Mat Premium Plus',cat:'Sports',emoji:'🧘',price:1299,old:2499,rating:4.5,reviews:654,badge:'NEW',isNew:true},
+  {id:10,name:'Vitamin C Glow Serum',cat:'Beauty',emoji:'✨',price:699,old:1499,rating:4.9,reviews:1876,badge:'HOT'},
+  {id:11,name:'Smart Fitness Band Pro',cat:'Electronics',emoji:'⌚',price:2299,old:4999,rating:4.6,reviews:987,badge:'SALE'},
+  {id:12,name:'Backpack Pro Traveller',cat:'Fashion',emoji:'🎒',price:1799,old:3999,rating:4.7,reviews:432,badge:'NEW',isNew:true},
+];
+function pct(p,o){return Math.round((1-p/o)*100)}
+function stars(r){return '★'.repeat(Math.floor(r))+(r%1>=.5?'½':'')}
+function card(p){return`<a class="product-card" href="product.html?id=${p.id}">
+  <div class="product-img">${p.badge?`<div class="p-badge ${p.badge==='NEW'?'new':p.badge==='HOT'?'hot':''}">${p.badge}</div>`:''}<span>${p.emoji}</span></div>
+  <div class="product-body">
+    <div class="p-cat">${p.cat}</div>
+    <div class="p-name">${p.name}</div>
+    <div class="p-stars"><span class="stars">${stars(p.rating)}</span><span class="r-count">(${p.reviews.toLocaleString()})</span></div>
+    <div class="p-price"><span class="price-now">₹${p.price.toLocaleString()}</span><span class="price-old">₹${p.old.toLocaleString()}</span><span class="price-pct">${pct(p.price,p.old)}% off</span></div>
+    <button class="atc-btn" onclick="event.preventDefault();addCart(${p.id})">🛒 Add to Cart</button>
+  </div></a>`}
+document.getElementById('hot-products').innerHTML=[...PRODUCTS].sort((a,b)=>pct(b.price,b.old)-pct(a.price,a.old)).slice(0,4).map(card).join('');
+document.getElementById('new-products').innerHTML=PRODUCTS.filter(p=>p.isNew).map(card).join('');
+
+function getCart(){return JSON.parse(localStorage.getItem('mazo-cart')||'[]')}
+function saveCart(c){localStorage.setItem('mazo-cart',JSON.stringify(c))}
+function addCart(id){const c=getCart();const e=c.find(i=>i.id===id);if(e)e.qty++;else c.push({id,qty:1});saveCart(c);updateBadge();showToast('Added to cart!')}
+function updateBadge(){const n=getCart().reduce((s,i)=>s+i.qty,0);document.getElementById('cart-badge').textContent=n;}
+let tt;function showToast(m){document.getElementById('toast-msg').textContent=m;const t=document.getElementById('toast');t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+updateBadge();
+
+// Timer
+let sec=8*3600+45*60+30;
+function tick(){sec--;if(sec<0)sec=8*3600+45*60;const pad=n=>String(n).padStart(2,'0');document.getElementById('t-h').textContent=pad(Math.floor(sec/3600));document.getElementById('t-m').textContent=pad(Math.floor((sec%3600)/60));document.getElementById('t-s').textContent=pad(sec%60);}
+setInterval(tick,1000);
 </script>
 </body>
 </html>
