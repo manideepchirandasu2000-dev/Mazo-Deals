@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Shop — Mazo Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07080f;--surface:#0f1019;--surface2:#171824;--surface3:#1f2030;--border:#252636;--accent:#f04e23;--accent-glow:rgba(240,78,35,.22);--accent2:#f8a21f;--text:#eeeef5;--sub:#9999bb;--muted:#55556e;--success:#19d47a;--r:12px;--r-sm:8px;--r-lg:18px;--nav-h:66px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}a{color:inherit;text-decoration:none}button{cursor:pointer;border:none;font-family:inherit;font-size:inherit}
+input,select{font-family:inherit;font-size:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:rgba(7,8,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 clamp(16px,4vw,64px);gap:20px;}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.nav-logo em{color:var(--accent);font-style:normal}
+.logo-tag{background:var(--accent);color:#fff;font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 7px;border-radius:4px;text-transform:uppercase;}
+.nav-search{flex:1;max-width:500px;display:flex;align-items:center;gap:10px;background:var(--surface2);border:1.5px solid var(--border);border-radius:40px;padding:0 18px;transition:border-color .2s;}
+.nav-search:focus-within{border-color:var(--accent)}
+.nav-search input{background:none;border:none;outline:none;color:var(--text);font-size:14px;width:100%;padding:11px 0;}
+.nav-search input::placeholder{color:var(--muted)}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{color:var(--sub);padding:8px 13px;border-radius:var(--r-sm);font-size:14px;font-weight:500;transition:background .15s,color .15s;}
+.nav-link:hover,.nav-link.active{background:var(--surface2);color:var(--text)}
+.nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.nav-icon-btn{background:none;color:var(--sub);width:40px;height:40px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;position:relative;}
+.nav-icon-btn:hover{background:var(--surface2);color:var(--text)}
+.badge{position:absolute;top:4px;right:4px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.nav-cta{background:var(--accent);color:#fff;padding:9px 20px;border-radius:40px;font-weight:600;font-size:14px;transition:opacity .15s;}
+.nav-cta:hover{opacity:.88}
+.breadcrumb{display:flex;align-items:center;gap:8px;padding:14px clamp(16px,4vw,64px);font-size:13px;color:var(--muted);}
+.breadcrumb a{color:var(--muted);transition:color .15s;}.breadcrumb a:hover{color:var(--accent)}.bc-sep{color:var(--border)}
+.shop-wrap{display:flex;gap:26px;padding:0 clamp(16px,4vw,64px) 60px;align-items:flex-start;}
+.sidebar{width:240px;flex-shrink:0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:22px;position:sticky;top:calc(var(--nav-h)+14px);}
+.sidebar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;}
+.clear-link{font-size:12px;color:var(--accent);font-weight:600;cursor:pointer;}
+.filter-sec{margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border);}
+.filter-sec:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.f-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:12px;}
+.f-options{display:flex;flex-direction:column;gap:9px;}
+.f-check{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--sub);transition:color .15s;}
+.f-check:hover{color:var(--text)}.f-check input{accent-color:var(--accent);width:15px;height:15px;}
+.price-inputs{display:flex;gap:8px;align-items:center;}
+.p-input{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);border-radius:var(--r-sm);padding:8px 10px;width:84px;outline:none;font-size:13px;transition:border-color .15s;}
+.p-input:focus{border-color:var(--accent)}
+.apply-btn{width:100%;background:var(--accent);color:#fff;padding:11px;border-radius:var(--r-sm);font-weight:700;font-size:14px;margin-top:10px;transition:opacity .15s;}
+.apply-btn:hover{opacity:.88}
+.shop-main{flex:1;min-width:0;}
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+.sort-bar span{font-size:14px;color:var(--sub)}.sort-bar span b{color:var(--text)}
+.sort-sel{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);border-radius:var(--r-sm);padding:9px 14px;outline:none;cursor:pointer;font-size:14px;transition:border-color .15s;}
+.sort-sel:focus{border-color:var(--accent)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.chip{display:flex;align-items:center;gap:6px;background:rgba(240,78,35,.1);border:1px solid rgba(240,78,35,.28);color:var(--accent);font-size:12px;font-weight:600;padding:5px 12px;border-radius:40px;}
+.chip button{background:none;color:var(--accent);font-size:16px;line-height:1;cursor:pointer;}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
+.product-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;display:block;}
+.product-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.p-img{width:100%;aspect-ratio:1;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden;transition:transform .3s;}
+.product-card:hover .p-img{transform:scale(1.04)}
+.p-badge{position:absolute;top:12px;left:12px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 9px;border-radius:5px;}
+.p-badge.new{background:#7c3aed}.p-badge.hot{background:#dc2626}
+.p-body{padding:15px;}
+.p-cat{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.p-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:9px;}
+.p-stars{display:flex;align-items:center;gap:5px;margin-bottom:9px;}
+.stars{color:var(--accent2);font-size:12px;}.r-cnt{font-size:11px;color:var(--muted);}
+.p-price{display:flex;align-items:baseline;gap:7px;}
+.p-now{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;}
+.p-old{font-size:13px;color:var(--muted);text-decoration:line-through;}
+.p-pct{font-size:12px;font-weight:600;color:var(--success);}
+.atc-btn{width:100%;margin-top:13px;background:var(--surface2);color:var(--text);border:1.5px solid var(--border);padding:10px;border-radius:var(--r-sm);font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s,border-color .15s,color .15s;}
+.atc-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.no-res{text-align:center;padding:80px 20px;color:var(--muted);}
+.no-res div{font-size:48px;margin-bottom:14px;}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface3);border:1px solid var(--border);color:var(--text);padding:13px 22px;border-radius:40px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.5);transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:999;pointer-events:none;}
+#toast.show{transform:translateX(-50%) translateY(0)}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:28px clamp(16px,4vw,64px);margin-top:20px;}
+.f-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.f-copy{font-size:13px;color:var(--muted);}
+@media(max-width:900px){.shop-wrap{flex-direction:column}.sidebar{width:100%;position:static}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div id="toast">✅ <span id="toast-msg"></span></div>
+<nav>
+  <a class="nav-logo" href="index.html"><em>Mazo</em>Deals<span class="logo-tag">SALE</span></a>
+  <div class="nav-search">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="search-input" placeholder="Search products…" oninput="renderShop()"/>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Home</a>
+    <a class="nav-link active" href="shop.html">Shop</a>
+    <a class="nav-link" href="wishlist.html">Wishlist</a>
+    <a class="nav-link" href="about.html">About</a>
+  </div>
+  <div class="nav-actions">
+    <a class="nav-icon-btn" href="wishlist.html">♡</a>
+    <a class="nav-icon-btn" href="cart.html">🛒<span class="badge" id="cart-badge">0</span></a>
+    <a class="nav-cta" href="login.html">Sign In</a>
+  </div>
+</nav>
+<div class="breadcrumb"><a href="index.html">Home</a><span class="bc-sep">›</span><span style="color:var(--text)">Shop</span></div>
+
+<div class="shop-wrap">
+  <aside class="sidebar">
+    <div class="sidebar-title">Filters <span class="clear-link" onclick="clearAll()">Clear All</span></div>
+    <div class="filter-sec">
+      <div class="f-label">Category</div>
+      <div class="f-options" id="cat-opts"></div>
+    </div>
+    <div class="filter-sec">
+      <div class="f-label">Price Range</div>
+      <div class="price-inputs">
+        <input class="p-input" type="number" id="p-min" placeholder="Min" value="0"/>
+        <span style="color:var(--muted)">—</span>
+        <input class="p-input" type="number" id="p-max" placeholder="Max" value="100000"/>
+      </div>
+    </div>
+    <div class="filter-sec">
+      <div class="f-label">Rating</div>
+      <div class="f-options">
+        <label class="f-check"><input type="checkbox" class="r-filter" value="4"> 4★ & above</label>
+        <label class="f-check"><input type="checkbox" class="r-filter" value="3"> 3★ & above</label>
+      </div>
+    </div>
+    <div class="filter-sec">
+      <div class="f-label">Discount</div>
+      <div class="f-options">
+        <label class="f-check"><input type="checkbox" class="d-filter" value="50"> 50%+ off</label>
+        <label class="f-check"><input type="checkbox" class="d-filter" value="30"> 30%+ off</label>
+        <label class="f-check"><input type="checkbox" class="d-filter" value="10"> 10%+ off</label>
+      </div>
+    </div>
+    <button class="apply-btn" onclick="renderShop()">Apply Filters</button>
+  </aside>
+
+  <div class="shop-main">
+    <div class="chips" id="active-chips"></div>
+    <div class="sort-bar">
+      <span>Showing <b id="p-count">0</b> products</span>
+      <select class="sort-sel" id="sort-sel" onchange="renderShop()">
+        <option value="">Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="rating">Highest Rated</option>
+        <option value="discount">Biggest Discount</option>
+        <option value="new">New First</option>
+      </select>
+    </div>
+    <div class="products-grid" id="prod-grid"></div>
+    <div class="no-res" id="no-res" style="display:none"><div>🔍</div>No products match your filters.</div>
+  </div>
+</div>
+
+<footer><div class="f-bottom"><div class="f-copy">© 2025 Mazo Deals. All rights reserved.</div><a href="index.html" style="color:var(--accent);font-size:13px;font-weight:600">← Back to Home</a></div></footer>
+
+<script>
+const PRODUCTS=[
+  {id:1,name:'Pro Wireless Earbuds X1',cat:'Electronics',emoji:'🎧',price:1299,old:3999,rating:4.8,reviews:2341,badge:'SALE'},
+  {id:2,name:'4K Ultra Smart TV 55"',cat:'Electronics',emoji:'📺',price:28999,old:54999,rating:4.6,reviews:876,badge:'HOT'},
+  {id:3,name:'Mechanical Gaming Keyboard',cat:'Electronics',emoji:'⌨️',price:3499,old:6999,rating:4.7,reviews:1203,badge:'SALE'},
+  {id:4,name:'Vintage Oversized Hoodie',cat:'Fashion',emoji:'👕',price:899,old:1999,rating:4.5,reviews:543,badge:'NEW',isNew:true},
+  {id:5,name:'Minimalist Sneakers Pro',cat:'Fashion',emoji:'👟',price:2499,old:5999,rating:4.9,reviews:3211,badge:'HOT'},
+  {id:6,name:'Smart Air Purifier 360',cat:'Home',emoji:'🌬️',price:7999,old:14999,rating:4.7,reviews:432,badge:'SALE'},
+  {id:7,name:'Coffee Maker Deluxe Pro',cat:'Home',emoji:'☕',price:4299,old:8999,rating:4.6,reviews:789,badge:'SALE'},
+  {id:8,name:'Wireless Gaming Mouse',cat:'Electronics',emoji:'🖱️',price:1999,old:3999,rating:4.8,reviews:2104,badge:'HOT'},
+  {id:9,name:'Yoga Mat Premium Plus',cat:'Sports',emoji:'🧘',price:1299,old:2499,rating:4.5,reviews:654,badge:'NEW',isNew:true},
+  {id:10,name:'Vitamin C Glow Serum',cat:'Beauty',emoji:'✨',price:699,old:1499,rating:4.9,reviews:1876,badge:'HOT'},
+  {id:11,name:'Smart Fitness Band Pro',cat:'Electronics',emoji:'⌚',price:2299,old:4999,rating:4.6,reviews:987,badge:'SALE'},
+  {id:12,name:'Backpack Pro Traveller',cat:'Fashion',emoji:'🎒',price:1799,old:3999,rating:4.7,reviews:432,badge:'NEW',isNew:true},
+  {id:13,name:'Noise Cancelling Headphones',cat:'Electronics',emoji:'🎵',price:5499,old:12999,rating:4.8,reviews:1654,badge:'SALE'},
+  {id:14,name:'Running Shoes Ultralight',cat:'Sports',emoji:'🏃',price:3299,old:7499,rating:4.6,reviews:876,badge:'HOT'},
+  {id:15,name:'Skincare Gift Set',cat:'Beauty',emoji:'🧴',price:1499,old:2999,rating:4.7,reviews:543,badge:'NEW',isNew:true},
+  {id:16,name:'Desk Lamp Smart LED',cat:'Home',emoji:'💡',price:1199,old:2499,rating:4.5,reviews:321,badge:'SALE'},
+];
+const cats=[...new Set(PRODUCTS.map(p=>p.cat))];
+document.getElementById('cat-opts').innerHTML=cats.map(c=>`<label class="f-check"><input type="checkbox" class="c-filter" value="${c}"> ${c}</label>`).join('');
+function pct(p,o){return Math.round((1-p/o)*100)}
+function strs(r){return'★'.repeat(Math.floor(r))+(r%1>=.5?'½':'')}
+function card(p){return`<div class="product-card" style="cursor:pointer" onclick="window.location='product.html?id=${p.id}'">
+  <div class="p-img">${p.badge?`<div class="p-badge ${p.badge==='NEW'?'new':p.badge==='HOT'?'hot':''}">${p.badge}</div>`:''}<span>${p.emoji}</span></div>
+  <div class="p-body">
+    <div class="p-cat">${p.cat}</div>
+    <div class="p-name">${p.name}</div>
+    <div class="p-stars"><span class="stars">${strs(p.rating)}</span><span class="r-cnt">(${p.reviews.toLocaleString()})</span></div>
+    <div class="p-price"><span class="p-now">₹${p.price.toLocaleString()}</span><span class="p-old">₹${p.old.toLocaleString()}</span><span class="p-pct">${pct(p.price,p.old)}% off</span></div>
+    <button class="atc-btn" onclick="event.stopPropagation();addCart(${p.id})">🛒 Add to Cart</button>
+  </div></div>`}
+function renderShop(){
+  const checkedCats=[...document.querySelectorAll('.c-filter:checked')].map(e=>e.value);
+  const minP=+document.getElementById('p-min').value||0;
+  const maxP=+document.getElementById('p-max').value||999999;
+  const minR=[...document.querySelectorAll('.r-filter:checked')].map(e=>+e.value);
+  const minD=[...document.querySelectorAll('.d-filter:checked')].map(e=>+e.value);
+  const q=document.getElementById('search-input').value.toLowerCase();
+  const sort=document.getElementById('sort-sel').value;
+  let list=PRODUCTS.filter(p=>{
+    if(checkedCats.length&&!checkedCats.includes(p.cat))return false;
+    if(p.price<minP||p.price>maxP)return false;
+    if(minR.length&&!minR.some(r=>p.rating>=r))return false;
+    if(minD.length&&!minD.some(d=>pct(p.price,p.old)>=d))return false;
+    if(q&&!p.name.toLowerCase().includes(q)&&!p.cat.toLowerCase().includes(q))return false;
+    return true;
+  });
+  if(sort==='price-asc')list.sort((a,b)=>a.price-b.price);
+  else if(sort==='price-desc')list.sort((a,b)=>b.price-a.price);
+  else if(sort==='rating')list.sort((a,b)=>b.rating-a.rating);
+  else if(sort==='discount')list.sort((a,b)=>pct(b.price,b.old)-pct(a.price,a.old));
+  else if(sort==='new')list.sort((a,b)=>(b.isNew?1:0)-(a.isNew?1:0));
+  document.getElementById('prod-grid').innerHTML=list.map(card).join('');
+  document.getElementById('p-count').textContent=list.length;
+  document.getElementById('no-res').style.display=list.length?'none':'block';
+  const chips=checkedCats.map(c=>`<div class="chip">${c}<button onclick="removeCat('${c}')">×</button></div>`);
+  document.getElementById('active-chips').innerHTML=chips.join('');
+}
+function removeCat(c){document.querySelectorAll('.c-filter').forEach(e=>{if(e.value===c)e.checked=false});renderShop()}
+function clearAll(){document.querySelectorAll('.c-filter,.r-filter,.d-filter').forEach(e=>e.checked=false);document.getElementById('p-min').value=0;document.getElementById('p-max').value=100000;renderShop();}
+function getCart(){return JSON.parse(localStorage.getItem('mazo-cart')||'[]')}
+function saveCart(c){localStorage.setItem('mazo-cart',JSON.stringify(c))}
+function addCart(id){const c=getCart();const e=c.find(i=>i.id===id);if(e)e.qty++;else c.push({id,qty:1});saveCart(c);updateBadge();showToast('Added to cart!')}
+function updateBadge(){const n=getCart().reduce((s,i)=>s+i.qty,0);document.getElementById('cart-badge').textContent=n;}
+let tt;function showToast(m){document.getElementById('toast-msg').textContent=m;const t=document.getElementById('toast');t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+renderShop();updateBadge();
+// Check URL param for category
+const urlCat=new URLSearchParams(location.search).get('cat');
+if(urlCat){const cb=document.querySelector(`.c-filter[value="${urlCat}"]`);if(cb){cb.checked=true;renderShop();}}
+</script>
+</body>
+</html>
