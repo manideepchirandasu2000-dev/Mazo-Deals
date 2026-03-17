@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Track Order — Mazo Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07080f;--surface:#0f1019;--surface2:#171824;--surface3:#1f2030;--border:#252636;--accent:#f04e23;--accent-glow:rgba(240,78,35,.22);--accent2:#f8a21f;--text:#eeeef5;--sub:#9999bb;--muted:#55556e;--success:#19d47a;--r:12px;--r-sm:8px;--r-lg:18px;--nav-h:66px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+h1,h2,h3{font-family:'Syne',sans-serif}a{color:inherit;text-decoration:none}button{cursor:pointer;border:none;font-family:inherit;font-size:inherit}
+input{font-family:inherit;font-size:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:rgba(7,8,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 clamp(16px,4vw,64px);gap:20px;}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.nav-logo em{color:var(--accent);font-style:normal}.logo-tag{background:var(--accent);color:#fff;font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 7px;border-radius:4px;text-transform:uppercase;}
+.nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.nav-icon-btn{background:none;color:var(--sub);width:40px;height:40px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;transition:background .15s;position:relative;}
+.nav-icon-btn:hover{background:var(--surface2);color:var(--text)}
+.badge{position:absolute;top:4px;right:4px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.nav-cta{background:var(--accent);color:#fff;padding:9px 20px;border-radius:40px;font-weight:600;font-size:14px;}
+.breadcrumb{display:flex;align-items:center;gap:8px;padding:14px clamp(16px,4vw,64px);font-size:13px;color:var(--muted);}
+.breadcrumb a{color:var(--muted);transition:color .15s;}.breadcrumb a:hover{color:var(--accent)}.bc-sep{color:var(--border)}
+.wrap{padding:0 clamp(16px,4vw,64px) 60px;max-width:760px;}
+.page-title{font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.5px;margin-bottom:26px;}
+.search-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:28px;margin-bottom:24px;}
+.search-card h3{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-bottom:16px;}
+.search-row{display:flex;gap:12px;}
+.track-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);border-radius:var(--r-sm);padding:13px 16px;outline:none;font-size:14px;transition:border-color .15s;}
+.track-input:focus{border-color:var(--accent)}.track-input::placeholder{color:var(--muted)}
+.track-btn{background:var(--accent);color:#fff;padding:13px 24px;border-radius:var(--r-sm);font-weight:700;font-size:15px;transition:opacity .15s;box-shadow:0 4px 20px var(--accent-glow);}
+.track-btn:hover{opacity:.88}
+.result-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:28px;display:none;}
+.result-card.show{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.order-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--border);}
+.order-id-label{font-family:'Syne',sans-serif;font-weight:900;font-size:20px;}
+.status-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;padding:6px 14px;border-radius:40px;}
+.status-pill.delivered{background:rgba(25,212,122,.1);border:1px solid rgba(25,212,122,.25);color:var(--success);}
+.status-pill.shipped{background:rgba(248,162,31,.1);border:1px solid rgba(248,162,31,.25);color:var(--accent2);}
+.status-pill.processing{background:rgba(240,78,35,.1);border:1px solid rgba(240,78,35,.25);color:var(--accent);}
+.pulse{width:8px;height:8px;border-radius:50%;background:currentColor;animation:p 2s infinite;}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.order-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:26px;}
+.info-block{background:var(--surface2);border-radius:var(--r);padding:16px;}
+.info-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;}
+.info-val{font-size:14px;font-weight:600;color:var(--text);}
+/* TRACKER */
+.tracker{margin-bottom:26px;}
+.tracker-title{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-bottom:20px;}
+.track-steps{display:flex;flex-direction:column;gap:0;}
+.track-step{display:flex;align-items:flex-start;gap:18px;padding-bottom:28px;position:relative;}
+.track-step:last-child{padding-bottom:0}
+.step-line{position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border);}
+.track-step.done .step-line{background:var(--success);}
+.track-step.active .step-line{background:linear-gradient(to bottom,var(--success),var(--border));}
+.step-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;position:relative;z-index:1;}
+.track-step.done .step-dot{border-color:var(--success);background:rgba(25,212,122,.15);}
+.track-step.active .step-dot{border-color:var(--accent);background:rgba(240,78,35,.15);animation:glow 2s infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(240,78,35,.4)}50%{box-shadow:0 0 0 8px rgba(240,78,35,0)}}
+.step-content{padding-top:5px;flex:1;}
+.step-title{font-weight:700;font-size:15px;margin-bottom:3px;}
+.step-subtitle{font-size:13px;color:var(--sub);}
+.step-time{font-size:12px;color:var(--muted);margin-top:3px;}
+.items-list{margin-bottom:22px;}
+.items-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;margin-bottom:14px;}
+.order-item{display:flex;align-items:center;gap:14px;padding:12px;background:var(--surface2);border-radius:var(--r);margin-bottom:8px;}
+.oi-emoji{font-size:28px;width:50px;height:50px;background:var(--surface3);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.oi-name{font-weight:600;font-size:14px;flex:1;}
+.oi-price{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
+.action-row{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-outline{background:none;color:var(--text);padding:11px 22px;border-radius:40px;font-weight:600;font-size:14px;border:1.5px solid var(--border);transition:border-color .15s,background .15s;}
+.btn-outline:hover{border-color:var(--accent);background:rgba(240,78,35,.06)}
+.btn-primary{background:var(--accent);color:#fff;padding:11px 22px;border-radius:40px;font-weight:700;font-size:14px;transition:opacity .15s;box-shadow:0 4px 20px var(--accent-glow);}
+.btn-primary:hover{opacity:.88}
+.recent-orders{margin-top:28px;}
+.recent-title{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:16px;}
+.recent-row{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:10px;cursor:pointer;transition:border-color .2s;}
+.recent-row:hover{border-color:var(--accent)}
+.rr-id{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;}
+.rr-date{font-size:12px;color:var(--muted);margin-top:2px;}
+.rr-right{text-align:right;}
+.rr-total{font-weight:700;font-size:14px;}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:22px clamp(16px,4vw,64px);margin-top:20px;}
+.f-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.f-copy{font-size:13px;color:var(--muted);}
+@media(max-width:600px){.order-info-grid{grid-template-columns:1fr}.search-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html"><em>Mazo</em>Deals<span class="logo-tag">SALE</span></a>
+  <div style="flex:1"></div>
+  <div class="nav-actions">
+    <a class="nav-icon-btn" href="wishlist.html">♡</a>
+    <a class="nav-icon-btn" href="cart.html">🛒<span class="badge" id="cart-badge">0</span></a>
+    <a class="nav-cta" href="login.html">Sign In</a>
+  </div>
+</nav>
+<div class="breadcrumb"><a href="index.html">Home</a><span class="bc-sep">›</span><a href="profile.html">My Account</a><span class="bc-sep">›</span><span style="color:var(--text)">Order Tracking</span></div>
+
+<div class="wrap">
+  <h1 class="page-title">Track Your Order</h1>
+
+  <div class="search-card">
+    <h3>Enter your Order ID</h3>
+    <div class="search-row">
+      <input class="track-input" type="text" id="order-inp" placeholder="e.g. MZO-A1B2C3" value=""/>
+      <button class="track-btn" onclick="trackOrder()">Track →</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Try: MZO-A1B2C3 (Delivered) · MZO-D4E5F6 (Shipped) · MZO-G7H8I9 (Processing)</p>
+  </div>
+
+  <div class="result-card" id="result-card">
+    <div class="order-meta">
+      <div>
+        <div class="order-id-label" id="r-order-id">MZO-A1B2C3</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Placed on <span id="r-date"></span></div>
+      </div>
+      <div class="status-pill" id="r-status"><div class="pulse"></div> <span id="r-status-text"></span></div>
+    </div>
+    <div class="order-info-grid">
+      <div class="info-block"><div class="info-lbl">Estimated Delivery</div><div class="info-val" id="r-eta"></div></div>
+      <div class="info-block"><div class="info-lbl">Courier Partner</div><div class="info-val" id="r-courier"></div></div>
+      <div class="info-block"><div class="info-lbl">Tracking ID</div><div class="info-val" id="r-tracking"></div></div>
+      <div class="info-block"><div class="info-lbl">Delivery Address</div><div class="info-val">Hyderabad, Telangana</div></div>
+    </div>
+    <div class="tracker">
+      <div class="tracker-title">Shipment Journey</div>
+      <div class="track-steps" id="track-steps"></div>
+    </div>
+    <div class="items-list">
+      <div class="items-title">Order Items</div>
+      <div id="r-items"></div>
+    </div>
+    <div class="action-row">
+      <button class="btn-outline" onclick="window.print()">🖨 Print Invoice</button>
+      <button class="btn-outline" onclick="alert('Return request submitted!')">↩ Request Return</button>
+      <a class="btn-primary" href="index.html">Shop More →</a>
+    </div>
+  </div>
+
+  <div class="recent-orders">
+    <div class="recent-title">Recent Orders</div>
+    <div id="recent-list"></div>
+  </div>
+</div>
+
+<footer><div class="f-bottom"><div class="f-copy">© 2025 Mazo Deals. All rights reserved.</div></div></footer>
+
+<script>
+const ORDERS={
+  'MZO-A1B2C3':{date:'12 Mar 2025',status:'delivered',eta:'Delivered on 15 Mar 2025',courier:'BlueDart Express',tracking:'BD94827364',items:[{emoji:'🎧',name:'Pro Wireless Earbuds X1',price:1299},{emoji:'👕',name:'Vintage Oversized Hoodie',price:899}],
+  steps:[
+    {icon:'✓',title:'Order Placed',sub:'Your order has been placed successfully',time:'12 Mar 2025 · 10:32 AM',done:true},
+    {icon:'✓',title:'Payment Confirmed',sub:'Payment of ₹2,198 received',time:'12 Mar 2025 · 10:35 AM',done:true},
+    {icon:'✓',title:'Order Packed',sub:'Your items have been packed',time:'12 Mar 2025 · 3:14 PM',done:true},
+    {icon:'✓',title:'Out for Delivery',sub:'With delivery partner',time:'14 Mar 2025 · 9:00 AM',done:true},
+    {icon:'✓',title:'Delivered',sub:'Package delivered at your doorstep',time:'15 Mar 2025 · 2:45 PM',done:true},
+  ]},
+  'MZO-D4E5F6':{date:'28 Feb 2025',status:'shipped',eta:'Expected by 20 Mar 2025',courier:'Delhivery',tracking:'DL71923845',items:[{emoji:'📺',name:'4K Ultra Smart TV 55"',price:28999}],
+  steps:[
+    {icon:'✓',title:'Order Placed',sub:'Your order has been placed successfully',time:'28 Feb 2025 · 2:10 PM',done:true},
+    {icon:'✓',title:'Payment Confirmed',sub:'Payment of ₹28,999 received',time:'28 Feb 2025 · 2:15 PM',done:true},
+    {icon:'✓',title:'Order Packed',sub:'Item packed and ready for pickup',time:'1 Mar 2025 · 11:00 AM',done:true},
+    {icon:'🚚',title:'In Transit',sub:'Package is on the way to your city',time:'3 Mar 2025 · 8:30 AM',active:true},
+    {icon:'🏠',title:'Out for Delivery',sub:'Will be delivered soon',time:'Pending',done:false},
+    {icon:'📦',title:'Delivered',sub:'',time:'Pending',done:false},
+  ]},
+  'MZO-G7H8I9':{date:'10 Feb 2025',status:'processing',eta:'Packing in progress',courier:'DTDC',tracking:'Awaiting pickup',items:[{emoji:'👟',name:'Minimalist Sneakers Pro',price:2499},{emoji:'🧘',name:'Yoga Mat Premium Plus',price:1299}],
+  steps:[
+    {icon:'✓',title:'Order Placed',sub:'Your order has been placed',time:'10 Feb 2025 · 6:22 PM',done:true},
+    {icon:'✓',title:'Payment Confirmed',sub:'Payment received',time:'10 Feb 2025 · 6:25 PM',done:true},
+    {icon:'⏳',title:'Order Processing',sub:'Your items are being packed',time:'In progress',active:true},
+    {icon:'📦',title:'Shipped',sub:'',time:'Pending',done:false},
+    {icon:'🏠',title:'Delivered',sub:'',time:'Pending',done:false},
+  ]},
+};
+const RECENT=[
+  {id:'MZO-A1B2C3',date:'12 Mar 2025',status:'Delivered',total:'₹2,198'},
+  {id:'MZO-D4E5F6',date:'28 Feb 2025',status:'In Transit',total:'₹28,999'},
+  {id:'MZO-G7H8I9',date:'10 Feb 2025',status:'Processing',total:'₹3,798'},
+];
+document.getElementById('recent-list').innerHTML=RECENT.map(r=>`
+  <div class="recent-row" onclick="document.getElementById('order-inp').value='${r.id}';trackOrder()">
+    <div><div class="rr-id">${r.id}</div><div class="rr-date">${r.date}</div></div>
+    <div class="rr-right"><div class="rr-total">${r.total}</div><div style="font-size:12px;color:var(--sub)">${r.status}</div></div>
+  </div>`).join('');
+function trackOrder(){
+  const id=document.getElementById('order-inp').value.trim().toUpperCase();
+  const o=ORDERS[id];
+  const card=document.getElementById('result-card');
+  if(!o){alert('Order not found. Try MZO-A1B2C3, MZO-D4E5F6, or MZO-G7H8I9');return;}
+  document.getElementById('r-order-id').textContent=id;
+  document.getElementById('r-date').textContent=o.date;
+  document.getElementById('r-eta').textContent=o.eta;
+  document.getElementById('r-courier').textContent=o.courier;
+  document.getElementById('r-tracking').textContent=o.tracking;
+  const sPill=document.getElementById('r-status');
+  sPill.className='status-pill '+o.status;
+  document.getElementById('r-status-text').textContent=o.status.charAt(0).toUpperCase()+o.status.slice(1);
+  document.getElementById('track-steps').innerHTML=o.steps.map((s,i)=>`
+    <div class="track-step ${s.done?'done':''} ${s.active?'active':''}">
+      ${i<o.steps.length-1?'<div class="step-line"></div>':''}
+      <div class="step-dot">${s.icon}</div>
+      <div class="step-content">
+        <div class="step-title">${s.title}</div>
+        ${s.sub?`<div class="step-subtitle">${s.sub}</div>`:''}
+        <div class="step-time">${s.time}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('r-items').innerHTML=o.items.map(it=>`
+    <div class="order-item">
+      <div class="oi-emoji">${it.emoji}</div>
+      <div class="oi-name">${it.name}</div>
+      <div class="oi-price">₹${it.price.toLocaleString()}</div>
+    </div>`).join('');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function getCart(){return JSON.parse(localStorage.getItem('mazo-cart')||'[]')}
+document.getElementById('cart-badge').textContent=getCart().reduce((s,i)=>s+i.qty,0);
+// Auto-load from URL param
+const urlId=new URLSearchParams(location.search).get('id');
+if(urlId){document.getElementById('order-inp').value=urlId;trackOrder();}
+</script>
+</body>
+</html>
