@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mazo Deals - Home</title>
+    <style>
+        body { font-family: Arial; margin:0; }
+        header { background:#333; color:#fff; padding:15px; text-align:center; }
+        nav a { margin:10px; color:white; text-decoration:none; }
+        .products { display:flex; gap:20px; padding:20px; }
+        .card { border:1px solid #ccc; padding:10px; width:200px; }
+        button { background:green; color:white; border:none; padding:5px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Mazo Deals</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">Cart</a>
+    </nav>
+</header>
+
+<h2 style="text-align:center;">Welcome to Mazo Deals</h2>
+
+<div class="products">
+    <div class="card">
+        <h3>Phone</h3>
+        <p>₹10000</p>
+        <button onclick="addToCart('Phone',10000)">Add to Cart</button>
+    </div>
+    <div class="card">
+        <h3>Laptop</h3>
+        <p>₹50000</p>
+        <button onclick="addToCart('Laptop',50000)">Add to Cart</button>
+    </div>
+</div>
+
+<script>
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push({name, price});
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(name + ' added to cart');
+}
+</script>
+</body>
+</html>
